@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // productsContainer is the div where the product grid will be injected
     const productsContainer = document.getElementById('product-list'); 
     // IMPORTANT: REPLACE WITH YOUR WHATSAPP NUMBER (e.g., 919876543210)
-    const whatsappNumber = 'YOUR_WHATSAPP_NUMBER_HERE'; 
+    const whatsappNumber = '9729643803'; 
 
     // Function to fetch products from the backend API
     async function fetchProducts() {
