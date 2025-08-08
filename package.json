@@ -1,0 +1,22 @@
+{
+  "name": "bajaj1",
+  "version": "1.0.0",
+  "description": "Backend and Frontend for Bajaj Elite Plates, with CSV file integration.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "bajaj",
+    "vehicle numbers",
+    "csv",
+    "express"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.2.0",
+    "csv-stringify": "^6.6.0",
+    "express": "^4.21.2"
+  }
+}

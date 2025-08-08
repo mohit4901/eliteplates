@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Bajaj Elite Plates</title>
+    <link rel="stylesheet" href="style.css"> <!-- Reuse existing styles -->
+    <style>
+        /* Specific styles for admin table and controls */
+        .admin-panel-container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: var(--alt-bg-color);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+        }
+        .admin-panel-container h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-family: var(--heading-font);
+        }
+        .admin-controls {
+            display: flex;
+            justify-content: space-between; /* Align add button left, logout right */
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .admin-controls button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        #logout-btn {
+            background-color: #dc3545; /* Red for logout */
+            color: white;
+            border: none;
+        }
+        #logout-btn:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        #add-product-btn {
+            background-color: var(--secondary-color); /* Green for add */
+            color: white;
+            border: none;
+        }
+        #add-product-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* Re-using product-table styles from style.css, but ensuring inputs are visible */
+        .products-table td input[type="text"],
+        .products-table td input[type="number"] {
+            display: inline-block !important; /* Override display:none from script.js */
+        }
+        .products-table td span {
+            display: none !important; /* Hide span elements */
+        }
+        /* Ensure edit/save/cancel buttons are always visible in admin panel */
+        .products-table button.edit-btn,
+        .products-table button.save-btn,
+        .products-table button.cancel-btn {
+            display: inline-block !important;
+        }
+
+        /* Message styles */
+        .admin-message {
+            text-align: center;
+            font-size: 1.1em;
+            color: var(--light-text-color);
+            margin-top: 20px;
+        }
+        .admin-message.error {
+            color: var(--primary-color);
+        }
+
+        /* New Product Form Styles */
+        #new-product-form-container {
+            background-color: var(--card-bg-color);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            display: none; /* Hidden by default */
+        }
+        #new-product-form-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-family: var(--heading-font);
+            text-align: center;
+        }
+        #new-product-form .form-group {
+            margin-bottom: 15px;
+        }
+        #new-product-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        #new-product-form input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--alt-bg-color);
+            color: var(--light-text-color);
+            font-size: 1em;
+        }
+        #new-product-form input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        #new-product-form .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        #new-product-form .form-actions button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        #new-product-form #submit-new-product {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        #new-product-form #submit-new-product:hover {
+            background-color: #c71735;
+            transform: translateY(-2px);
+        }
+        #new-product-form #cancel-new-product {
+            background-color: #6c757d; /* Grey */
+            color: white;
+        }
+        #new-product-form #cancel-new-product:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        #new-product-message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #new-product-message.success {
+            color: var(--secondary-color);
+        }
+        #new-product-message.error {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-panel-container">
+        <div class="admin-controls">
+            <button id="add-product-btn" class="btn">Add New Product</button> <!-- NEW BUTTON -->
+            <button id="logout-btn" class="btn">Logout</button>
+        </div>
+        <h1>Manage Product Numbers</h1>
+        
+        <!-- New Product Form Container -->
+        <div id="new-product-form-container">
+            <h2>Add New Number</h2>
+            <form id="new-product-form">
+                <div class="form-group">
+                    <label for="new-number">Number:</label>
+                    <input type="text" id="new-number" name="number" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-description">Description:</label>
+                    <input type="text" id="new-description" name="description" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-cost">Cost:</label>
+                    <input type="text" id="new-cost" name="cost" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-availability">Availability (e.g., In Stock, Sold Out):</label>
+                    <input type="text" id="new-availability" name="availability" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-imageurl">Image URL:</label>
+                    <input type="text" id="new-imageurl" name="imageurl" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="submit-new-product">Add Product</button>
+                    <button type="button" id="cancel-new-product">Cancel</button>
+                </div>
+                <p id="new-product-message" style="display:none;"></p>
+            </form>
+        </div>
+
+        <div id="admin-product-list">
+            <!-- Editable product table will be loaded here by admin.js -->
+            <p class="admin-message">Loading products...</p>
+        </div>
+    </div>
+
+    <script src="admin.js"></script> <!-- Link to admin-specific JS -->
+</body>
+</html>
